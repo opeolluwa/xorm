@@ -9,8 +9,8 @@ pub fn drop_database() {
 }
 
 /// add new migration
-pub fn add_migrations() {
-    println!("migrations added")
+pub fn add_migrations(name: String) {
+    println!("migrations added {name}")
 }
 
 /// run migrations

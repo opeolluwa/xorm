@@ -1,7 +1,7 @@
 use clap::*;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-/// parse the arguments and return the sub command
+// Simplistic and asynchronous  ORM for Rust
 pub struct Arguments {
     ///xorm-sub-commands
     #[clap(subcommand)]
@@ -21,19 +21,40 @@ pub enum SubCommands {
 /// the database subcommands are create, drop
 #[derive(Args, Debug)]
 pub struct DatabaseCommands {
-    ///create the database in the specified DATABASE_URL    
-    pub create: String, //path to create the application
-    ///drop the created database
-    pub drop: String,
+    #[clap(subcommand)]
+    pub action: DatabaseSubCommands,
 }
 
-/// create the init command, essentially a struct to hold the init command arguments and options
+/// database sub commands
+#[derive(Debug, Subcommand)]
+pub enum DatabaseSubCommands {
+    ///create the database in the specified DATABASE_URL    
+    Create,
+    ///drop the created database
+    Drop,
+}
+
+/// the migration commands
 #[derive(Args, Debug)]
 pub struct MigrationsCommands {
+    #[clap(subcommand)]
+    pub action: MigrationsSubCommands,
+}
+/// create the init command, essentially a struct to hold the init command arguments and options
+#[derive(Subcommand, Debug)]
+pub enum MigrationsSubCommands {
     /// add a new migration
-    pub add: String,
+    Add(MigrationName),
     /// run a migration
-    pub run: String,
+    Run,
     ///revert a migration
-    pub revert: String,
+    Revert,
+}
+
+/// add migration name
+#[derive(Args, Debug)]
+pub struct MigrationName {
+    /// the name of the migration
+    #[clap(short, long, value_parser, forbid_empty_values = true)]
+    pub name: String,
 }
