@@ -7,8 +7,7 @@ use crate::commands::{
 mod arguments;
 mod commands;
 
-// use arguments;
-// use commands;
+
 
 fn main() {
     let argz = arguments::Arguments::parse();
@@ -28,5 +27,4 @@ fn main() {
             arguments::MigrationsSubCommands::Revert => revert_migrations(),
         },
     }
-    println!("Hello, world!");
 }
