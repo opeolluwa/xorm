@@ -14,11 +14,22 @@
 
 /// the model trait is ued to provide
 pub trait IntoModel {
-    // find all record
-    // fn find();
-    // find record, if not fount create
-    // fn find_or_create();
-    // find record by primary key
+    /// create a new model 
+    fn create(){
+        println!("create a new record")
+    }
+    ///
+    /// find all record
+    fn find() {
+        println!("the find associated function")
+    }
+    /// find record, if not fount create
+    fn find_or_create() {
+        println!("the find or create associated function")
+    }
+    /// find record by primary key
     // TODO: find a way to deduce the primary key
-    fn find_by_pk();
+    fn find_by_pk() {
+        println!("the find by pk associated function")
+    }
 }
