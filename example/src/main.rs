@@ -2,7 +2,10 @@ use xorm::IntoModel;
 use xorm_macro::IntoModel;
 
 #[derive(IntoModel)]
-struct UserInformation;
+struct UserInformation{
+    name: String,
+    age:u64
+}
 
 fn main() {
     // create a new user
