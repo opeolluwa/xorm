@@ -1,2 +1,3 @@
-# x-orm
-Simplistic and asynchronous  ORM for Rust
+# XORM
+XORM  is an experimental ORM library for Rust, which aims to be async-first and developer friendly.
+
