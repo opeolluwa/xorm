@@ -1,6 +1,6 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+use xorm::IntoModel;
+use xorm_macro::IntoModel;
+
 
 #[cfg(test)]
 mod tests {
