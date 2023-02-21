@@ -1,0 +1,16 @@
+[package]
+edition = "2021"
+name = "x-orm"
+version = "0.1.0"
+description = ""
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+exclude = [
+  "sandbox",
+]
+members = [
+  "xorm-core",
+  "xorm-cli",
+  "xorm",
+]
+[dependencies]
