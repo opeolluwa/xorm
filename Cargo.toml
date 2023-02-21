@@ -1,16 +1,19 @@
 [package]
+description = "Simplistic and asynchronous ORM for Rust"
 edition = "2021"
-name = "x-orm"
+name = "xorm"
 version = "0.1.0"
-description = ""
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [workspace]
 exclude = [
   "sandbox",
+  # "example"
 ]
 members = [
-  "xorm-core",
-  "xorm-cli",
-  "xorm",
+  "xorm_cli",
+  "xorm_macro",
+  # "example"
 ]
 [dependencies]
+# sqlx = "0.6.2"
+# tokio = "1.25.0"
