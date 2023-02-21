@@ -16,8 +16,8 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn;
 
-#[proc_macro_derive(Model)]
-pub fn find_macro_derive(input: TokenStream) -> TokenStream {
+#[proc_macro_derive(IntoModel)]
+pub fn find_by_pk_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
     impl_find_macro(&ast)
 }
@@ -25,8 +25,8 @@ pub fn find_macro_derive(input: TokenStream) -> TokenStream {
 fn impl_find_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
     let gen = quote! {
-        impl HelloMacro for #name {
-            fn find() {
+        impl IntoModel for #name {
+            fn find_by_pk() {
                 println!("Hello, Macro! My name is {}!", stringify!(#name));
             }
         }

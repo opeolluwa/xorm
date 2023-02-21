@@ -13,12 +13,12 @@
 // limitations under the License.
 
 /// the model trait is ued to provide
-pub trait Model {
-    /// find all record
-    fn find();
-    /// find record, if not fount create
-    fn find_or_create();
-    /// find record by primary key
-    /// TODO: find a way to deduce the primary key
+pub trait IntoModel {
+    // find all record
+    // fn find();
+    // find record, if not fount create
+    // fn find_or_create();
+    // find record by primary key
+    // TODO: find a way to deduce the primary key
     fn find_by_pk();
 }
