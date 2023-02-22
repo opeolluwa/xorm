@@ -102,30 +102,31 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
 
     // the actual implementation of the traits
     let gen = quote::quote! {
-              #[async_trait::async_trait]
+        #[async_trait::async_trait]
 
-              impl IntoModel for #name {
-                  // find record by primary key
-                  fn find_by_pk() {
-                      println!("{}", #find_by_pk_query);
-                  }
+        impl IntoModel for #name {
+            // find record by primary key
+            fn find_by_pk() {
+                println!("{}", #find_by_pk_query);
+            }
 
-              //  find or create record
-              fn find_or_create(){
-              println!("{}", #find_or_create_query);
-                  }
+        //  find or create record
+        fn find_or_create(){
+        println!("{}", #find_or_create_query);
+            }
 
-              // delete record
-               fn destroy(){
-              println!(" delete a record {}", #destroy_query);
-                  }
-              }
+        // delete record
+         fn destroy(){
+        println!(" delete a record {}", #destroy_query);
+            }
+        }
 
-              //create record
-             async  fn create(){
-    println!(" delete a record {}", #create_record_query);
-              }
-          };
+        //create record
+          // #[async_trait::async_trait]
+         fn create(){
+        println!(" delete a record {}", #create_record_query);
+        }
+    };
     gen.into()
 }
 

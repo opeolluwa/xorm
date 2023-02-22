@@ -14,11 +14,10 @@
 
 /// the model trait is ued to provide
 #[async_trait::async_trait]
+#[allow(unused_variables)]
 pub trait IntoModel {
     /// create a new model
-    async fn create() {
-        println!("create a new record")
-    }
+    fn create() {}
 
     /// find all record
     fn find(condition: String) {
