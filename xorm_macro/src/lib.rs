@@ -14,17 +14,20 @@
 
 use proc_macro::TokenStream;
 use syn;
-use xorm_macro_core::*;
+
+mod destroy;
+mod find;
+mod find_by_pk;
 
 #[proc_macro_derive(IntoModel)]
 pub fn find_by_pk_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
-    find_by_pk::impl_macro(&ast).into()
+    find_by_pk::impl_macro(&ast)
 }
 
-
+// pub mod destroy;
 // #[proc_macro_derive(IntoModel)]
 // pub fn delete_macro_derive(input: TokenStream) -> TokenStream {
 //     let ast = syn::parse(input).unwrap();
-//     destroy::impl_macro(&ast).into()
+//     destroy::impl_macro(&ast)
 // }
