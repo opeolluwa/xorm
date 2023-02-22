@@ -13,23 +13,18 @@
 // limitations under the License.
 
 use proc_macro::TokenStream;
-use quote::quote;
 use syn;
+use xorm_macro_core::*;
 
 #[proc_macro_derive(IntoModel)]
 pub fn find_by_pk_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
-    impl_find_macro(&ast)
+    find_by_pk::impl_macro(&ast).into()
 }
 
-fn impl_find_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let gen = quote! {
-        impl IntoModel for #name {
-            fn find_by_pk() {
-                println!("Hello, Macro! My name is {}!", stringify!(#name));
-            }
-        }
-    };
-    gen.into()
-}
+
+// #[proc_macro_derive(IntoModel)]
+// pub fn delete_macro_derive(input: TokenStream) -> TokenStream {
+//     let ast = syn::parse(input).unwrap();
+//     destroy::impl_macro(&ast).into()
+// }

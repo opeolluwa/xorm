@@ -14,14 +14,14 @@
 
 /// the model trait is ued to provide
 pub trait IntoModel {
-    /// create a new model 
-    fn create(){
+    /// create a new model
+    fn create() {
         println!("create a new record")
     }
     ///
     /// find all record
-    fn find() {
-        println!("the find associated function")
+    fn find(condition: String) {
+        println!("the find model where {}", condition)
     }
     /// find record, if not fount create
     fn find_or_create() {
@@ -31,5 +31,10 @@ pub trait IntoModel {
     // TODO: find a way to deduce the primary key
     fn find_by_pk() {
         println!("the find by pk associated function")
+    }
+
+    /// delete a model record
+    fn destroy() {
+        println!("Delete a model record")
     }
 }

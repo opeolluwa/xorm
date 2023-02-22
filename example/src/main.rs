@@ -2,10 +2,16 @@ use xorm::IntoModel;
 use xorm_macro::IntoModel;
 
 #[derive(IntoModel)]
-struct UserInformation{
+struct UserInformation {
     name: String,
-    age:u64
+    age: u64,
 }
+
+// #[derive(IntoModel)]
+//  struct UserInformation{ SomeStruct {
+//      name: String,
+//      age:u64
+//  } };
 
 fn main() {
     // create a new user
@@ -14,4 +20,6 @@ fn main() {
     UserInformation::find_or_create();
     // find user by primary key
     UserInformation::find_by_pk();
+    // delete a model record
+    UserInformation::destroy();
 }
