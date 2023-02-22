@@ -16,14 +16,9 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn;
 
-#[proc_macro_derive(IntoModel)]
-pub fn delete_macro_derive(input: TokenStream) -> TokenStream {
-    let ast = syn::parse(input).unwrap();
-    impl_macro(&ast)
-}
 
 // the impl macro body
-fn impl_macro(ast: &syn::DeriveInput) -> TokenStream {
+pub fn impl_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
 
     let fields = if let syn::Data::Struct(syn::DataStruct { fields, .. }) = &ast.data {
