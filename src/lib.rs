@@ -32,4 +32,9 @@ pub trait IntoModel {
     fn find_by_pk() {
         println!("the find by pk associated function")
     }
+
+    /// delete a model record 
+    fn destroy(){
+        println!("Delete a model record")
+    }
 }

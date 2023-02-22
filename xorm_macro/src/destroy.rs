@@ -17,12 +17,13 @@ use quote::quote;
 use syn;
 
 #[proc_macro_derive(IntoModel)]
-pub fn find_by_pk_macro_derive(input: TokenStream) -> TokenStream {
+pub fn delete_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
-    impl_find_macro(&ast)
+    impl_macro(&ast)
 }
 
-fn impl_find_macro(ast: &syn::DeriveInput) -> TokenStream {
+// the impl macro body
+fn impl_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
 
     let fields = if let syn::Data::Struct(syn::DataStruct { fields, .. }) = &ast.data {
@@ -38,31 +39,29 @@ fn impl_find_macro(ast: &syn::DeriveInput) -> TokenStream {
     };
     let fields_named = &fields_named
         .ok_or("Unable to retrieve fields named")
-        .unwrap()
+        .expect("Error getting model fields")
         .named;
 
-    //TODO: make it possible for types that implement into model trait
-    let statement = format!(
-        "SELECT {} FROM {}",
-        fields_named
-            .iter()
-            .map(|f| format!("{}", f.ident.as_ref().unwrap()))
-            .fold(String::default(), |a, f| if a.is_empty() {
+    // the fields names
+    let fields = fields_named
+        .iter()
+        .map(|f| format!("{}", f.ident.as_ref().unwrap()))
+        .fold(String::default(), |a, f| {
+            if a.is_empty() {
                 f
             } else {
                 a + ", " + f.as_str()
-            }),
-        name
-    );
+            }
+        });
+    //TODO: make it possible for types that implement into model trait
+    let sql_statement = format!("DELETE {} FROM {}", fields, name);
 
     let gen = quote! {
         impl IntoModel for #name {
-            fn find_by_pk() {
-                println!("{}", #statement);
+            fn delete() {
+                println!("{}", #sql_statement);
             }
         }
     };
     gen.into()
 }
-
-// pub mod destroy;
