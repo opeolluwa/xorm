@@ -7,14 +7,15 @@ version = "0.1.0"
 [workspace]
 exclude = [
   "sandbox",
-  "xorm_macro",
   "example",
   "tests",
 ]
 members = [
-  "xorm_cli", # "xorm_macro",  # "example"
+  "xorm_cli",
+  "xorm_macro", # "xorm_macro",  # "example"
 ]
 [dependencies]
-# sqlx = "0.6.2"
-# tokio = "1.25.0"
+async-trait = "0.1.64"
 syn = "1.0"
+tokio = {version = "1.25.0", features = ["full"]}
+tokio-postgres = "0.7.7"

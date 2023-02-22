@@ -7,5 +7,8 @@ version = "0.1.0"
 proc-macro = true
 
 [dependencies]
+async-trait = "0.1.64"
 quote = "1.0"
 syn = "1.0"
+tokio = { version = "1.25.0", features = ["full"] }
+tokio-postgres = "0.7.7"

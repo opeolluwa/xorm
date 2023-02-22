@@ -83,24 +83,54 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
             condition = "$UNIQUE_KEY"
         )
     };
+
+    let create_record_query = {
+        format!(
+            "INSERT {fields} INTO {table} VALUES {values} ",
+            table = name,
+            fields = fields_named
+                .iter()
+                .map(|f| format!("{}", f.ident.as_ref().unwrap()))
+                .fold(String::default(), |a, f| if a.is_empty() {
+                    f
+                } else {
+                    a + ", " + f.as_str()
+                }),
+            values = "$VALUES"
+        )
+    };
+
     // the actual implementation of the traits
     let gen = quote::quote! {
-        impl IntoModel for #name {
-            // find record by primary key
-            fn find_by_pk() {
-                println!("{}", #find_by_pk_query);
-            }
+              #[async_trait::async_trait]
 
-        //  find or create record
-        fn find_or_create(){
-        println!("{}", #find_or_create_query);
-            }
+              impl IntoModel for #name {
+                  // find record by primary key
+                  fn find_by_pk() {
+                      println!("{}", #find_by_pk_query);
+                  }
 
-        // delete record
-         fn destroy(){
-        println!(" delete a record {}", #destroy_query);
-            }
-        }
-    };
+              //  find or create record
+              fn find_or_create(){
+              println!("{}", #find_or_create_query);
+                  }
+
+              // delete record
+               fn destroy(){
+              println!(" delete a record {}", #destroy_query);
+                  }
+              }
+
+              //create record
+             async  fn create(){
+    println!(" delete a record {}", #create_record_query);
+              }
+          };
     gen.into()
 }
+
+// takes an sql query then returns a result type containing the result and error
+// async fn execute_query(query: String) -> Result<(), tokio_postgres::Error> {
+//     println!("the query is  {}", query);
+//     Ok(())
+// }

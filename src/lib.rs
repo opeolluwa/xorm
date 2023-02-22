@@ -13,9 +13,10 @@
 // limitations under the License.
 
 /// the model trait is ued to provide
+#[async_trait::async_trait]
 pub trait IntoModel {
     /// create a new model
-    fn create() {
+    async fn create() {
         println!("create a new record")
     }
 
