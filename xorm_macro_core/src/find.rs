@@ -1,4 +1,4 @@
-use proc_macro::TokenStream;
+use proc_macro2::TokenStream;
 use quote::quote;
 use syn;
 
@@ -44,5 +44,3 @@ pub fn impl_macro(ast: &syn::DeriveInput) -> TokenStream {
     };
     gen.into()
 }
-
-// pub mod destroy;
