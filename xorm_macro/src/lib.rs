@@ -12,19 +12,65 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use proc_macro::TokenStream;
+use proc_macro;
+use quote;
 use syn;
-use xorm_macro_core::*;
 
 #[proc_macro_derive(IntoModel)]
-pub fn find_by_pk_macro_derive(input: TokenStream) -> TokenStream {
+pub fn find_by_pk_macro_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = syn::parse(input).unwrap();
-    find_by_pk::impl_macro(&ast).into()
+    impl_macro(&ast)
 }
 
+fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
+    let name = &ast.ident;
 
-// #[proc_macro_derive(IntoModel)]
-// pub fn delete_macro_derive(input: TokenStream) -> TokenStream {
-//     let ast = syn::parse(input).unwrap();
-//     destroy::impl_macro(&ast).into()
-// }
+    let fields = if let syn::Data::Struct(syn::DataStruct { fields, .. }) = &ast.data {
+        Some(fields)
+    } else {
+        None
+    };
+
+    let fields_named = if let Some(syn::Fields::Named(fields_named)) = fields {
+        Some(fields_named)
+    } else {
+        None
+    };
+    let fields_named = &fields_named
+        .ok_or("Unable to retrieve fields named")
+        .unwrap()
+        .named;
+
+    //TODO: make it possible for types that implement into model trait
+    let statement = format!(
+        "SELECT {} FROM {}",
+        fields_named
+            .iter()
+            .map(|f| format!("{}", f.ident.as_ref().unwrap()))
+            .fold(String::default(), |a, f| if a.is_empty() {
+                f
+            } else {
+                a + ", " + f.as_str()
+            }),
+        name
+    );
+
+    ///TODO inject here
+    let gen = quote::quote! {
+        impl IntoModel for #name {
+            fn find_by_pk() {
+                println!("{}", #statement);
+            }
+
+        fn find_or_create(){
+        println!(" find or create {}", #statement);
+            }
+
+
+             fn destroy(){
+        println!(" delete a record {}", #statement);
+            }
+        }
+    };
+    gen.into()
+}

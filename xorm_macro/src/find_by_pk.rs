@@ -1,4 +1,4 @@
-use proc_macro2::TokenStream;
+use proc_macro::TokenStream;
 use quote::quote;
 use syn;
 
@@ -35,12 +35,19 @@ pub fn impl_macro(ast: &syn::DeriveInput) -> TokenStream {
         name
     );
 
+    ///TODO inject here
     let gen = quote! {
         impl IntoModel for #name {
-            fn find(condition:String) {
-                println!("{} WHERE", #statement, condition);
+            fn find_by_pk() {
+                println!("{}", #statement);
+            }
+
+        fn find_or_create(){
+        println!(" find or create {}", #statement);
             }
         }
     };
     gen.into()
 }
+
+// pub mod destroy;
