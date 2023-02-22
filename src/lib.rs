@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /// the model trait is ued to provide
-pub trait IntoModel{
+pub trait IntoModel {
     /// create a new model
     fn create() {
         println!("create a new record")

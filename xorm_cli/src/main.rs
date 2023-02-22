@@ -7,8 +7,6 @@ use crate::commands::{
 mod arguments;
 mod commands;
 
-
-
 fn main() {
     let argz = arguments::Arguments::parse();
     let action = argz.action;
