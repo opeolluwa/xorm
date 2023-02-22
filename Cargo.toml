@@ -5,14 +5,16 @@ name = "xorm"
 version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [workspace]
-exclude = []
-members = [
-  ".",
-  "xorm_cli",
-  "xorm_macro_core",
+exclude = [
+  "sandbox",
   "xorm_macro",
   "example",
+  "tests",
+]
+members = [
+  "xorm_cli", # "xorm_macro",  # "example"
 ]
 [dependencies]
 # sqlx = "0.6.2"
 # tokio = "1.25.0"
+syn = "1.0"

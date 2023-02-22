@@ -18,15 +18,17 @@ pub trait IntoModel {
     fn create() {
         println!("create a new record")
     }
-    ///
+
     /// find all record
     fn find(condition: String) {
         println!("the find model where {}", condition)
     }
+
     /// find record, if not fount create
     fn find_or_create() {
         println!("the find or create associated function")
     }
+
     /// find record by primary key
     // TODO: find a way to deduce the primary key
     fn find_by_pk() {
@@ -37,4 +39,12 @@ pub trait IntoModel {
     fn destroy() {
         println!("Delete a model record")
     }
+}
+
+pub enum ImplModel {
+    Create,
+    Find,
+    FindOrCreate,
+    Destroy,
+    FindByPk,
 }
