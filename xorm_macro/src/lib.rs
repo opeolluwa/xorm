@@ -22,7 +22,5 @@ mod find_by_pk;
 #[proc_macro_derive(IntoModel)]
 pub fn find_by_pk_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
-  
     find_by_pk::impl_macro(&ast)
 }
-

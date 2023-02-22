@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /// the model trait is ued to provide
-pub trait IntoModel {
+pub trait IntoModel{
     /// create a new model
     fn create() {
         println!("create a new record")
@@ -28,7 +28,7 @@ pub trait IntoModel {
     fn find_or_create() {
         println!("the find or create associated function")
     }
-    
+
     /// find record by primary key
     // TODO: find a way to deduce the primary key
     fn find_by_pk() {
@@ -41,5 +41,10 @@ pub trait IntoModel {
     }
 }
 
-
-
+pub enum ImplModel {
+    Create,
+    Find,
+    FindOrCreate,
+    Destroy,
+    FindByPk,
+}

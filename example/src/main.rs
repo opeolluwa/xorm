@@ -7,8 +7,6 @@ struct UserInformation {
     age: u64,
 }
 
-
-
 fn main() {
     // create a new user
     UserInformation::create();
