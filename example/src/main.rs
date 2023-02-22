@@ -7,11 +7,7 @@ struct UserInformation {
     age: u64,
 }
 
-// #[derive(IntoModel)]
-//  struct UserInformation{ SomeStruct {
-//      name: String,
-//      age:u64
-//  } };
+
 
 fn main() {
     // create a new user
