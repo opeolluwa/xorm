@@ -7,5 +7,7 @@ version = "0.1.0"
 
 [dependencies]
 async-trait = "0.1.64"
+tokio = { version = "1.25.0", features = ["full"] }
+tokio-postgres = "0.7.7"
 xorm = {path = "../"}
 xorm_macro = {path = "../xorm_macro"}

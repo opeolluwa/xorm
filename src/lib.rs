@@ -17,7 +17,9 @@
 #[allow(unused_variables)]
 pub trait IntoModel {
     /// create a new model
-    fn create() {}
+    async fn create() -> Result<String, tokio_postgres::Error> {
+        Ok(format!("the find or create associated function"))
+    }
 
     /// find all record
     fn find(condition: String) {

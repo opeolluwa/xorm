@@ -103,7 +103,6 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
     // the actual implementation of the traits
     let gen = quote::quote! {
         #[async_trait::async_trait]
-
         impl IntoModel for #name {
             // find record by primary key
             fn find_by_pk() {
@@ -122,9 +121,31 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
         }
 
         //create record
-          // #[async_trait::async_trait]
-         fn create(){
-        println!(" delete a record {}", #create_record_query);
+        //   #[async_trait::async_trait]
+       async fn create()->Result<String, tokio_postgres::Error> {
+
+          // Connect to the database.
+    let (client, connection) = tokio_postgres::connect(
+        "postgres://opeolluwa:thunderstorm@localhost/postgres",
+        tokio_postgres::NoTls,
+    )
+    .await?;
+
+    // The connection object performs the actual communication with the database,
+    // so spawn it off to run on its own.
+    tokio::spawn(async move {
+        if let Err(e) = connection.await {
+            eprintln!("connection error: {}", e);
+        }
+    });
+
+    // Now we can execute a simple statement that just returns its parameter.
+    let rows = client.query("SELECT $1::TEXT", &[&"hello world"]).await?;
+
+    // And then check that we got back the same string we sent over.
+    let value: &str = rows[0].get(0);
+    println!("{}", value);
+    Ok(format!("create a record  {}", #create_record_query))
         }
     };
     gen.into()

@@ -1,3 +1,4 @@
+use tokio_postgres;
 use xorm::IntoModel;
 use xorm_macro::IntoModel;
 
@@ -8,18 +9,17 @@ struct UserInformation {
     age: u64,
 }
 
-fn main() {
-    /*    let user = UserInformation {
-        name: "Cora Francis".to_string(),
-        age: 24,
-    }; */
-
+#[tokio::main]
+async fn main() -> Result<(), ()> {
     // create a new user
-    UserInformation::create();
+    let rr = UserInformation::create().await.ok().unwrap();
+    println!(" the CREATE {}", rr);
     //find or create a new user
     UserInformation::find_or_create();
     // find user by primary key
     UserInformation::find_by_pk();
     // delete a model record
     UserInformation::destroy();
+
+    Ok(())
 }
