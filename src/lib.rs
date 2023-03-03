@@ -14,6 +14,7 @@
 
 /// the model trait is ued to provide
 pub trait IntoModel {
+    // const TABLE_NAME: String;
     /// create a new model
     fn create() {
         println!("create a new record")

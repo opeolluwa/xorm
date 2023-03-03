@@ -63,9 +63,9 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
             }
         }
         Ok(syn::Meta::Path(_)) | Ok(syn::Meta::List(_)) => todo!(),
-        Err(_) => {
-            /* panic!("expected a NameValue style attribue, e.g. #[orbital_period = 1.0]",), */
-            todo!()
+        Err(err_msg) => {
+            panic!("an error occurred due to >{err_msg}")
+            // todo!()
         }
     };
     // get the names of the fields available on the struct that implement the trait
@@ -122,7 +122,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
     // the actual implementation of the traits
     let gen = quote::quote! {
         impl IntoModel for #name {
-            const TABLE_NAME :String = #tbl_name;
+            // const TABLE_NAME :String = #tbl_name;
             // find record by primary key
             fn find_by_pk() {
                 println!("{}", #find_by_pk_query);
@@ -146,3 +146,25 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
     "expected a NameValue style attribue, e.g. #[orbital_period = 1.0]",
     // bad.path().span()
 ), */
+
+// Let's assume that we do not want to accept enums as input to our custom derive method.
+
+// This condition can be easily checked with the help of syn. But how do we tell the user, that we do not accept enums? The idiomatic way to report errors in procedural macros is to panic:
+
+// fn impl_hello_world(ast: &syn::DeriveInput) -> quote::Tokens {
+//     let name = &ast.ident;
+//     // Check if derive(HelloWorld) was specified for a struct
+//     if let syn::Body::Struct(_) = ast.body {
+//         // Yes, this is a struct
+//         quote! {
+//             impl HelloWorld for #name {
+//                 fn hello_world() {
+//                     println!("Hello, World! My name is {}", stringify!(#name));
+//                 }
+//             }
+//         }
+//     } else {
+//         //Nope. This is an Enum. We cannot handle these!
+//        panic!("#[derive(HelloWorld)] is only defined for structs, not for enums!");
+//     }
+// }
