@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use proc_macro;
-use quote;
-use syn;
-
 #[proc_macro_derive(IntoModel)]
 pub fn find_by_pk_macro_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = syn::parse(input).unwrap();
@@ -24,10 +20,17 @@ pub fn find_by_pk_macro_derive(input: proc_macro::TokenStream) -> proc_macro::To
 
 /// the macro implementation
 fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
-    // get the name of the struct that implement the trait  TODO: use an attribute to define the table name
+    /* get the name of the struct on which the trait is implemented
+     // # example
+     #[derive(IntoModel)]
+    struct UserInformation{
+    some fields here
+    }
+    The name filed below will return `UserInformation`
+    */
     let name = &ast.ident;
 
-    // get the fields
+    // get the names of the fields available on the struct that implement the trait
     let fields_named = {
         let fields = if let syn::Data::Struct(syn::DataStruct { fields, .. }) = &ast.data {
             Some(fields)
@@ -40,29 +43,31 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
         } else {
             None
         };
-        let fields_named = &fields_named
+
+        // return the named fields
+        &fields_named
             .ok_or("Unable to retrieve fields named")
             .unwrap()
-            .named;
-
-        fields_named
+            .named
     };
 
+    // get the fields separate by a comma
+    // e.g SELECT name, age, gender ...
+    // where name age, gender are the fields
+    let fields = fields_named
+        .iter()
+        .map(|f| format!("{}", f.ident.as_ref().unwrap()))
+        .fold(String::default(), |a, f| {
+            if a.is_empty() {
+                f
+            } else {
+                a + ", " + f.as_str()
+            }
+        });
+
+    // generate query to  fetch py pk
     //TODO: make it possible for types that implement into model trait
-    let find_by_pk_query = {
-        format!(
-            "SELECT {} FROM {}",
-            fields_named
-                .iter()
-                .map(|f| format!("{}", f.ident.as_ref().unwrap()))
-                .fold(String::default(), |a, f| if a.is_empty() {
-                    f
-                } else {
-                    a + ", " + f.as_str()
-                }),
-            name
-        )
-    };
+    let find_by_pk_query = { format!("SELECT {} FROM {}", fields, name) };
 
     // delete statement
     let destroy_query = { format!("DELETE FROM {} WHERE $CONDITION", name) };
@@ -70,16 +75,9 @@ fn impl_macro(ast: &syn::DeriveInput) -> proc_macro::TokenStream {
     // find or create statement
     let find_or_create_query = {
         format!(
-            "INSERT INTO {table} SELECT {fields:?} FROM ( SELECT * FROM {table} WHERE {condition})",
+            "INSERT INTO {table} SELECT {fields} FROM ( SELECT * FROM {table} WHERE {condition})",
             table = name,
-            fields = fields_named
-                .iter()
-                .map(|f| format!("{}", f.ident.as_ref().unwrap()))
-                .fold(String::default(), |a, f| if a.is_empty() {
-                    f
-                } else {
-                    a + ", " + f.as_str()
-                }),
+            fields = &fields,
             condition = "$UNIQUE_KEY"
         )
     };
